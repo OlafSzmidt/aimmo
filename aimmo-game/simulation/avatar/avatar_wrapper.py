@@ -1,8 +1,11 @@
 import logging
+from collections import Counter
+
 import requests
 
 from simulation.action import ACTIONS, MoveAction, WaitAction
-
+from simulation.location import Location
+from simulation.avatar.avatar_view import AvatarView
 
 LOGGER = logging.getLogger(__name__)
 
@@ -19,6 +22,7 @@ class AvatarWrapper(object):
         self.health = 5
         self.score = 0
         self.events = []
+        self.pickups = Counter() # Empty counter as avatar has not picked anything up yet.
         self.avatar_appearance = avatar_appearance
         self.worker_url = worker_url
         self.effects = set()
@@ -26,6 +30,7 @@ class AvatarWrapper(object):
         self.attack_strength = 1
         self.fog_of_war_modifier = 0
         self._action = None
+        self.view = AvatarView(initial_location=Location(0,0), radius=3)
 
     def update_effects(self):
         effects_to_remove = set()

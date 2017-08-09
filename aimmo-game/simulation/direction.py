@@ -13,8 +13,15 @@ class Direction:
     def dict(self):
         return {'x': self.x, 'y': self.y}
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+
+        return self.x == other.x and self.y == other.y
+
     def __repr__(self):
         return 'Direction(x={}, y={})'.format(self.x, self.y)
+
 
 NORTH = Direction(0, 1)
 EAST = Direction(1, 0)

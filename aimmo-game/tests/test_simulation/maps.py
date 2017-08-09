@@ -3,7 +3,8 @@ from __future__ import absolute_import
 from collections import defaultdict
 
 from simulation.location import Location
-from simulation.world_map import Cell, WorldMap
+from simulation.world_map import WorldMap
+from simulation.maps.cell import Cell
 
 
 class MockPickup(object):
@@ -32,6 +33,9 @@ class MockCell(Cell):
         self.name = name
         self.actions = actions
         self.partially_fogged = False
+        self.created = False
+        self.add_to_scene = None
+        self.remove_from_scene = None
 
     def __eq__(self, other):
         return self is other
@@ -59,12 +63,16 @@ class InfiniteMap(WorldMap):
         self.updates += 1
         self.num_avatars = num_avatars
 
-    @property
-    def num_rows(self):
+    def min_x(self):
+        return float('-inf')
+
+    def max_x(self):
         return float('inf')
 
-    @property
-    def num_cols(self):
+    def min_y(self):
+        return float('-inf')
+
+    def max_y(self):
         return float('inf')
 
 

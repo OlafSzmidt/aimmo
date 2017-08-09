@@ -172,9 +172,9 @@ class LocalWorkerManager(WorkerManager):
     )
 
     def __init__(self, *args, **kwargs):
-        self.workers = {}
-        self.port_counter = itertools.count(1989)
         super(LocalWorkerManager, self).__init__(*args, **kwargs)
+        self.workers = {}
+        self.port_counter = itertools.count(self.port + 10)
 
     def create_worker(self, player_id):
         assert(player_id not in self.workers)
@@ -283,6 +283,7 @@ class KubernetesWorkerManager(WorkerManager):
         }):
             LOGGER.debug('Removing pod %s', pod.obj['spec'])
             pod.delete()
+
 
 WORKER_MANAGERS = {
     'local': LocalWorkerManager,
