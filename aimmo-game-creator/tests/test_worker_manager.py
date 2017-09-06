@@ -33,6 +33,9 @@ class ConcreteWorkerManager(WorkerManager):
         except KeyError:
             pass
 
+    def test_method(self, someId):
+        self.removed_workers.append(someId)
+
 
 class RequestMock(object):
     def __init__(self, num_games):
