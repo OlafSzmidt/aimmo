@@ -41,7 +41,7 @@ import socket
 import os
 
 from django_autoconfig import autoconfig
-from utils import get_ip
+from utilities import get_ip
 
 ALLOWED_HOSTS = ['*']
 

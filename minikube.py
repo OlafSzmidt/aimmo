@@ -12,7 +12,7 @@ import stat
 import tarfile
 import yaml
 from run import run_command
-from utils import get_ip
+from utilities import get_ip
 from urllib import urlretrieve
 from urllib2 import urlopen
 from zipfile import ZipFile

@@ -18,7 +18,7 @@ import traceback
 
 from misc import run_command_async
 from misc import kill_process_tree
-from utils import get_ip
+from utilities import get_ip
 
 
 logging.basicConfig()
