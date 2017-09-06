@@ -18,7 +18,8 @@ import traceback
 
 from misc import run_command_async
 from misc import kill_process_tree
-from misc import get_ip
+from utils import get_ip
+
 
 logging.basicConfig()
 LOGGER = logging.getLogger(__name__)
@@ -33,7 +34,7 @@ class TestService(TestCase):
         2. Try to use the service with wrong credentials
         3. Try to play the first level with a default created character
 
-        As most of the functionality is accessible using the api or other
+        As most of th   e functionality is accessible using the api or other
         methods, we use simple requests rather than Selenium (though
         selenium should be easily be added to the module).
 

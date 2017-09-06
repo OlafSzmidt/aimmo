@@ -7,20 +7,8 @@ import sys
 import time
 import traceback
 from subprocess import CalledProcessError
-import socket
+from utils import get_ip
 
-def get_ip():
-    # http://stackoverflow.com/a/28950776/671626
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        # doesn't even have to be reachable
-        s.connect(('10.255.255.255', 0))
-        IP = s.getsockname()[0]
-    except:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
-    return IP
 
 _SCRIPT_LOCATION = os.path.abspath(os.path.dirname(__file__))
 _MANAGE_PY = os.path.join(_SCRIPT_LOCATION, 'example_project', 'manage.py')

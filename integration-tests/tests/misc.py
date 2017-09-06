@@ -18,18 +18,6 @@ logging.basicConfig()
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
-def get_ip():
-    # http://stackoverflow.com/a/28950776/671626
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        # doesn't even have to be reachable
-        s.connect(('10.255.255.255', 0))
-        IP = s.getsockname()[0]
-    except:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
-    return IP
 
 def run_command_async(args, cwd=".", verbose=False):
     if verbose:
@@ -38,12 +26,14 @@ def run_command_async(args, cwd=".", verbose=False):
         p = subprocess.Popen(args, cwd=cwd, stdout=FNULL, stderr=subprocess.STDOUT)
     return p
 
+
 def process_tree(pid):
     parent = psutil.Process(pid)
     to_kill = [pid]
     for child in parent.children(recursive=True):
         to_kill = to_kill + process_tree(child.pid)
     return to_kill
+
 
 def kill_process_tree(pid):
     try:
