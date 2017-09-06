@@ -7,7 +7,7 @@ def custom_test_suite():
 
 setup(
     name='integration-tests',
-        include_package_data=True,
+    include_package_data=True,
     install_requires=[
     ],
     tests_require=[
