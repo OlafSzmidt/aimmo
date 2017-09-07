@@ -7,7 +7,7 @@ import sys
 import time
 import traceback
 from subprocess import CalledProcessError
-from utilities import get_ip
+from utilities.getip import get_ip
 
 
 _SCRIPT_LOCATION = os.path.abspath(os.path.dirname(__file__))
