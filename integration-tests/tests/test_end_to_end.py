@@ -8,8 +8,10 @@ import os
 import time
 import signal
 import subprocess
-import sys
 import json
+
+import sys
+sys.path.insert(0, "aimmo/utilities/getip")
 
 FNULL = open(os.devnull, 'w')
 
