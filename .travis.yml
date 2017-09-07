@@ -13,6 +13,9 @@ install:
   - pip install .
   - pip install coveralls
 script:
+  - import sys
+  - print("Checking sys.path")
+  - print(sys.path)
   - python all_tests.py --coverage
 after_success:
   - coveralls
