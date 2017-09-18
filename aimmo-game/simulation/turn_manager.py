@@ -1,5 +1,7 @@
 import logging
 import time
+import requests
+
 from threading import RLock
 from threading import Thread
 
@@ -41,10 +43,11 @@ class TurnManager(Thread):
     """
     daemon = True
 
-    def __init__(self, game_state, end_turn_callback, completion_url):
+    def __init__(self, game_state, end_turn_callback, completion_url, world_state=None):
         state_provider.set_world(game_state)
         self.end_turn_callback = end_turn_callback
         self._completion_url = completion_url
+        self.world_state = world_state
         super(TurnManager, self).__init__()
 
     def run_turn(self):
@@ -68,9 +71,7 @@ class TurnManager(Thread):
         game_state.world_map.reconstruct_interactive_state(num_avatars)
 
     def _mark_complete(self):
-        pass
-        # from world_state import WorldState
-        # requests.post(self._completion_url, json=world_state.get_update())
+        requests.post(self._completion_url, json=self.world_state.get_updates())
 
     def run(self):
         while True:
