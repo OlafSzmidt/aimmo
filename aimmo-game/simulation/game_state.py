@@ -1,4 +1,8 @@
+from logging import getLogger
+
 from simulation.avatar import fog_of_war
+
+LOGGER = getLogger(__name__)
 
 
 class GameState(object):

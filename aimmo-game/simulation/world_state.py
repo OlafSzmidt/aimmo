@@ -1,13 +1,15 @@
 from enum import Enum
 from collections import defaultdict
 
+
 class MapFeature(Enum):
     HEALTH_POINT = 'health_point'
     SCORE_POINT = 'score_point'
     PICKUP = 'pickup'
     OBSTACLE = 'obstacle'
 
-class WorldState():
+
+class WorldState:
     """
     The world updates class serves as a buffer between the updates generated
     in different parts of the back-end and the data emitted by the socket.

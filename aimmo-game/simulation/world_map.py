@@ -1,9 +1,7 @@
 import math
-import random
 from logging import getLogger
 
-from simulation.world_state import MapFeature
-from simulation.pickups import ALL_PICKUPS
+from simulation.utils.map_utils import UpdateMapAndAvatars
 from simulation.action import MoveAction
 from simulation.location import Location
 
@@ -102,8 +100,8 @@ class WorldMap(object):
 
         (min_x, max_x, min_y, max_y) = WorldMap._min_max_from_dimensions(height, width)
         grid = {}
-        for x in xrange(min_x, max_x + 1):
-            for y in xrange(min_y, max_y + 1):
+        for x in range(min_x, max_x + 1):
+            for y in range(min_y, max_y + 1):
                 location = Location(x, y)
                 grid[location] = Cell(location)
         return cls(grid, new_settings)
@@ -183,100 +181,23 @@ class WorldMap(object):
         return self.num_rows * self.num_cols
 
     def update(self, num_avatars):
-        # TODO: refactor into GameState (this class does too much)
-        self._update_avatars()
-        self._update_map(num_avatars)
+        """
+            Calls a separate utility class which handles all the updates.
+            All logic was refactored from here to UpdateMapAndAvatars.
 
-    def _update_avatars(self):
-        self._apply_score()
-        self._apply_pickups()
-
-    def _apply_pickups(self):
-        for cell in self.pickup_cells():
-            if cell.avatar is not None:
-                cell.pickup.apply(cell.avatar)
-
-    def _apply_score(self):
-        for cell in self.score_cells():
-            try:
-                cell.avatar.score += 1
-            except AttributeError:
-                pass
-
-    def _update_map(self, num_avatars):
-        self._expand(num_avatars)
-        self._reset_score_locations(num_avatars)
-        self._add_pickups(num_avatars)
-
-    def _expand(self, num_avatars):
-        start_size = self.num_cells
-        target_num_cells = int(math.ceil(num_avatars * self.settings['TARGET_NUM_CELLS_PER_AVATAR']))
-        num_cells_to_add = target_num_cells - self.num_cells
-        if num_cells_to_add > 0:
-            self._add_outer_layer()
-            assert self.num_cells > start_size
-
-    def _add_outer_layer(self):
-        self._add_vertical_layer(self.min_x() - 1)
-        self._add_vertical_layer(self.max_x() + 1)
-        self._add_horizontal_layer(self.min_y() - 1)
-        self._add_horizontal_layer(self.max_y() + 1)
-
-    def _add_vertical_layer(self, x):
-        for y in xrange(self.min_y(), self.max_y() + 1):
-            self.grid[Location(x, y)] = Cell(Location(x, y))
-
-    def _add_horizontal_layer(self, y):
-        for x in xrange(self.min_x(), self.max_x() + 1):
-            self.grid[Location(x, y)] = Cell(Location(x, y))
-
-    def _reset_score_locations(self, num_avatars):
-        for cell in self.score_cells():
-            if random.random() < self.settings['SCORE_DESPAWN_CHANCE']:
-                # Remove the score point from the scene if there was one.
-                if cell.generates_score:
-                    cell.remove_from_scene = MapFeature.SCORE_POINT
-                cell.generates_score = False
-
-        new_num_score_locations = len(list(self.score_cells()))
-        target_num_score_locations = int(math.ceil(
-            num_avatars * self.settings['TARGET_NUM_SCORE_LOCATIONS_PER_AVATAR']
-        ))
-        num_score_locations_to_add = target_num_score_locations - new_num_score_locations
-        locations = self._get_random_spawn_locations(num_score_locations_to_add)
-        for cell in locations:
-            # Add the score point to the scene if there wasn't one.
-            if not cell.generates_score:
-                cell.add_to_scene = MapFeature.SCORE_POINT
-            cell.generates_score = True
-
-    def _add_pickups(self, num_avatars):
-        target_num_pickups = int(math.ceil(num_avatars * self.settings['TARGET_NUM_PICKUPS_PER_AVATAR']))
-        LOGGER.debug('Aiming for %s new pickups', target_num_pickups)
-        max_num_pickups_to_add = target_num_pickups - len(list(self.pickup_cells()))
-        locations = self._get_random_spawn_locations(max_num_pickups_to_add)
-        for cell in locations:
-            if random.random() < self.settings['PICKUP_SPAWN_CHANCE']:
-                LOGGER.info('Adding new pickup at %s', cell)
-                cell.pickup = random.choice(ALL_PICKUPS)(cell)
-
-    def _get_random_spawn_locations(self, max_locations):
-        if max_locations <= 0:
-            return []
-        potential_locations = list(self.potential_spawn_locations())
-        try:
-            return random.sample(potential_locations, max_locations)
-        except ValueError:
-            LOGGER.debug('Not enough potential locations')
-            return potential_locations
+            :param self: The world_map object
+            :param num_avatars: The new number of avatars
+        """
+        UpdateMapAndAvatars.update_avatars_and_map(self, num_avatars)
 
     def get_random_spawn_location(self):
-        """Return a single random spawn location.
+        """
+        Return a single random spawn location.
 
         Throws:
             IndexError: if there are no possible locations.
         """
-        return self._get_random_spawn_locations(1)[0].location
+        return UpdateMapAndAvatars.get_random_spawn_locations_external(self, 1)[0].location
 
     def can_move_to(self, target_location):
         if not self.is_on_map(target_location):
@@ -315,8 +236,8 @@ class WorldMap(object):
 
     def __iter__(self):
         return ((self.get_cell(Location(x, y))
-                for y in xrange(self.min_y(), self.max_y() + 1))
-                for x in xrange(self.min_x(), self.max_x() + 1))
+                for y in range(self.min_y(), self.max_y() + 1))
+                for x in range(self.min_x(), self.max_x() + 1))
 
 
 def world_map_static_spawn_decorator(world_map, spawn_location):
