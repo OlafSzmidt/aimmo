@@ -5,7 +5,7 @@ import unittest
 
 from simulation.location import Location
 from simulation.pickups import DeliveryPickup
-from simulation.world_map import WorldMap
+from simulation.maps.world_map import WorldMap
 from simulation.custom_map import ScoreCellDecoder
 from simulation.custom_map import ObstacleDecoder
 from simulation.custom_map import PickupDecoder
