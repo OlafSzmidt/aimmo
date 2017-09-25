@@ -4,13 +4,11 @@ from simulation.levels.levels import LEVELS
 
 from simulation.location import Location
 from simulation.game_state import GameState
-from simulation.world_map import WorldMap
+from simulation.maps.world_maps import WorldMaps
 from simulation.world_map import world_map_static_spawn_decorator
 from simulation.world_map import DEFAULT_LEVEL_SETTINGS
 
-from simulation.pickups import HealthPickup
-from simulation.pickups import InvulnerabilityPickup
-from simulation.pickups import DamagePickup
+from simulation.pickup import DeliveryTote
 
 
 class BaseGenerator(object):
@@ -88,7 +86,7 @@ class PickupDecoder(Decoder):
 class JsonLevelGenerator(TemplateLevelGenerator):
     def _register_json(self, json_map):
         self.json_map = json_map
-        self.world_map = WorldMap.generate_empty_map(15, 15, self.settings)
+        self.world_map = WorldMaps.generate_empty_map(15, 15, self.settings)
 
     def _register_decoders(self):
         self.decoders = [

@@ -17,16 +17,11 @@ class AvatarWrapper(object):
     def __init__(self, player_id, initial_location, worker_url, avatar_appearance):
         self.player_id = player_id
         self.location = initial_location
-        self.health = 5
-        self.score = 0
         self.events = []
         self.avatar_appearance = avatar_appearance
         self.worker_url = worker_url
-        self.effects = set()
-        self.resistance = 0
-        self.attack_strength = 1
-        self.fog_of_war_modifier = 0
         self._action = None
+        self.holdingTote = False
         self.view = AvatarView(initial_location=Location(0,0), radius=3)
 
     def update_effects(self):
@@ -78,19 +73,8 @@ class AvatarWrapper(object):
     def clear_action(self):
         self._action = None
 
-    def die(self, respawn_location):
-        # TODO: extract settings for health and score loss on death
-        self.health = 5
-        self.score = max(0, self.score - 2)
-        self.location = respawn_location
-
     def add_event(self, event):
         self.events.append(event)
-
-    def damage(self, amount):
-        applied_dmg = max(0, amount - self.resistance)
-        self.health -= applied_dmg
-        return applied_dmg
 
     def serialise(self):
         return {

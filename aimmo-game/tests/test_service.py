@@ -5,7 +5,7 @@ from unittest import TestCase, skip
 from simulation.game_state import GameState
 from simulation.location import Location
 from simulation.turn_manager import state_provider
-from simulation.world_map import WorldMap
+from simulation.maps.world_maps import WorldMaps
 from simulation.world_state import WorldState
 from simulation.avatar.avatar_manager import AvatarManager
 
@@ -51,7 +51,7 @@ class TestServiceInternals(TestCase):
         ]
         grid = {Location(x, y-1): MockCell(Location(x, y-1), **CELLS[x][y])
                 for y in xrange(3) for x in xrange(2)}
-        state_provider.set_world(GameState(WorldMap(grid, {}), avatar_manager))
+        state_provider.set_world(GameState(WorldMaps(grid, {}), avatar_manager))
 
         world_state = WorldState(state_provider)
         world_state.ready_to_update = True
