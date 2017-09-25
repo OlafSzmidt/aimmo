@@ -51,7 +51,7 @@ class DeliveryPickup(_Pickup):
 
     def serialise(self):
         return {
-            'type': 'delivery'
+                'type': 'delivery'
         }
 
 

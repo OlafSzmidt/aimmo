@@ -49,4 +49,4 @@ class TestDeliveryPickup(_BaseCases.BasePickupTestCase):
         self.assertEqual(self.avatar.holdingTote, True)
 
     def test_serialise(self):
-        self.assertEqual(self.pickup.serialise(), {'type' : 'delivery'})
+        self.assertEqual(self.pickup.serialise(), {'type': 'delivery'})
