@@ -1,8 +1,10 @@
-from abc import ABCMeta, abstractmethod, abstractproperty
-import effects
+from abc import ABCMeta, abstractmethod
 
 
 class _Pickup(object):
+    '''
+    Abstract class for all types (ie. subclasses) of pickups.
+    '''
     __metaclass__ = ABCMeta
 
     def __init__(self, cell):
@@ -11,10 +13,7 @@ class _Pickup(object):
     def __str__(self):
         return self.__class__.__name__
 
-    def delete(self):
-        '''
-        Deletes the pickup from the /CELL/.
-        '''
+    def delete_pickup(self):
         self.cell.pickup = None
 
     def apply(self, avatar):
@@ -24,7 +23,7 @@ class _Pickup(object):
         :param avatar: an Avatar object.
         '''
         self._apply(avatar)
-        self.delete()
+        self.delete_pickup()
 
     @abstractmethod
     def _apply(self, avatar):
@@ -35,26 +34,22 @@ class _Pickup(object):
         raise NotImplementedError()
 
 
-class DeliveryPickup(_Pickup):
+class DeliveryTote(_Pickup):
     '''
     Inherits generic functionality from _Pickup and needs to implement abstract methods.
     '''
 
     def __init__(self, cell):
-        super(DeliveryPickup, self).__init__(cell)
+        super(DeliveryTote, self).__init__(cell)
 
     def _apply(self, avatar):
         avatar.holdingTote = True
 
-    def __repr__(self):
-        return 'DeliveryPickup'
-
     def serialise(self):
         return {
-            'type': 'delivery'
+            'type': 'delivery_tote',
         }
 
-
 ALL_PICKUPS = (
-    DeliveryPickup,
+    DeliveryTote
 )

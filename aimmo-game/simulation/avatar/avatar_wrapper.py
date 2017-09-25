@@ -20,6 +20,7 @@ class AvatarWrapper(object):
         self.health = 5
         self.score = 0
         self.events = []
+        self.holdingTote = False
         self.avatar_appearance = avatar_appearance
         self.worker_url = worker_url
         self.effects = set()
