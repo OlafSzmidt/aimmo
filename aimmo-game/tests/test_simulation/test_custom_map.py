@@ -4,6 +4,7 @@ import random
 import unittest
 
 from simulation.location import Location
+from simulation.pickups import DeliveryPickup
 from simulation.world_map import WorldMap
 from simulation.custom_map import ScoreCellDecoder
 from simulation.custom_map import ObstacleDecoder
@@ -60,15 +61,14 @@ class TestDecoders(unittest.TestCase):
         self.assertTrue(self.map.get_cell(Location(1, 1)).generates_score)
 
     def test_pickup_decoder(self):
-        # PickupDecoder("0").decode({
-        #     "x" : "1",
-        #     "y" : "0",
-        #     "type" : "damage"
-        # }, self.map)
-
-        # TODO: write new test here
+        PickupDecoder("0").decode({
+            "x" : "1",
+            "y" : "0",
+            "type" : "delivery"
+        }, self.map)
 
         self.assertTrue(self.map.get_cell(Location(0, 0)).pickup is None)
+        self.assertTrue(isinstance(self.map.get_cell(Location(1, 0)).pickup, DeliveryPickup))
 
 def get_mock_level(map, parsers):
     class MockLevel(JsonLevelGenerator):
