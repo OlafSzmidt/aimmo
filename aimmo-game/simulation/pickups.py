@@ -44,7 +44,7 @@ class DeliveryPickup(_Pickup):
         super(DeliveryPickup, self).__init__(cell)
 
     def _apply(self, avatar):
-        avatar.holdingTote = True
+        avatar.pickups[DeliveryPickup] += 1 # Add a single count of this item.
 
     def __repr__(self):
         return 'DeliveryPickup'
