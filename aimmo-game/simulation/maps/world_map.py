@@ -113,45 +113,13 @@ class WorldMap(object):
         return self.num_rows * self.num_cols
 
     def update(self, num_avatars):
-        # TODO: refactor into GameState (this class does too much)
-        self._update_avatars()
-        self._update_map(num_avatars)
+        self._add_pickups(num_avatars)
 
-    def _update_avatars(self):
-        self._apply_pickups()
-
-    def _apply_pickups(self):
+    def _add_pickups(self, num_avatars):
         for cell in self.pickup_cells():
             if cell.avatar is not None:
                 cell.pickup.apply(cell.avatar)
 
-    def _update_map(self, num_avatars):
-        self._expand(num_avatars)
-        self._add_pickups(num_avatars)
-
-    def _expand(self, num_avatars):
-        start_size = self.num_cells
-        target_num_cells = int(math.ceil(num_avatars * self.settings['TARGET_NUM_CELLS_PER_AVATAR']))
-        num_cells_to_add = target_num_cells - self.num_cells
-        if num_cells_to_add > 0:
-            self._add_outer_layer()
-            assert self.num_cells > start_size
-
-    def _add_outer_layer(self):
-        self._add_vertical_layer(self.min_x() - 1)
-        self._add_vertical_layer(self.max_x() + 1)
-        self._add_horizontal_layer(self.min_y() - 1)
-        self._add_horizontal_layer(self.max_y() + 1)
-
-    def _add_vertical_layer(self, x):
-        for y in xrange(self.min_y(), self.max_y() + 1):
-            self.grid[Location(x, y)] = Cell(Location(x, y))
-
-    def _add_horizontal_layer(self, y):
-        for x in xrange(self.min_x(), self.max_x() + 1):
-            self.grid[Location(x, y)] = Cell(Location(x, y))
-
-    def _add_pickups(self, num_avatars):
         target_num_pickups = int(math.ceil(num_avatars * self.settings['TARGET_NUM_PICKUPS_PER_AVATAR']))
         LOGGER.debug('Aiming for %s new pickups', target_num_pickups)
         max_num_pickups_to_add = target_num_pickups - len(list(self.pickup_cells()))
@@ -204,12 +172,6 @@ class WorldMap(object):
             return cell.moves[0].avatar
 
         return None
-
-    def get_no_fog_distance(self):
-        return self.settings['NO_FOG_OF_WAR_DISTANCE']
-
-    def get_partial_fog_distance(self):
-        return self.settings['PARTIAL_FOG_OF_WAR_DISTANCE']
 
     def __repr__(self):
         return repr(self.grid)

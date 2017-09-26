@@ -186,28 +186,6 @@ class TestWorldMap(TestCase):
             with self.assertRaises(ValueError):
                 map.get_cell(Location(x, 2))
 
-    def test_grid_expand(self):
-        self.settings['TARGET_NUM_CELLS_PER_AVATAR'] = 5
-        map = WorldMap(self._generate_grid(), self.settings)
-        map.update(1)
-        self.assertTrue(map.is_on_map(Location(-1, -1)))
-        self.assertTrue(map.is_on_map(Location(-1, 2)))
-        self.assertTrue(map.is_on_map(Location(2, 2)))
-        self.assertTrue(map.is_on_map(Location(2, -1)))
-        self.assertGridSize(map, 4)
-        map.update(4)
-        self.assertGridSize(map, 6)
-        self.assertTrue(map.is_on_map(Location(0, 3)))
-        self.assertTrue(map.is_on_map(Location(3, 0)))
-        self.assertTrue(map.is_on_map(Location(-2, 0)))
-        self.assertTrue(map.is_on_map(Location(0, -2)))
-
-    def test_grid_doesnt_expand(self):
-        self.settings['TARGET_NUM_CELLS_PER_AVATAR'] = 4
-        map = WorldMap(self._generate_grid(), self.settings)
-        map.update(1)
-        self.assertGridSize(map, 2)
-
     def test_pickups_added(self):
         self.settings['TARGET_NUM_PICKUPS_PER_AVATAR'] = 1
         self.settings['PICKUP_SPAWN_CHANCE'] = 1
