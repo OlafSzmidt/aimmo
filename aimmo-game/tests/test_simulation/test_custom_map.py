@@ -39,27 +39,6 @@ class TestDecoders(unittest.TestCase):
         self.assertTrue(self.map.get_cell(Location(1, 0)).habitable)
         self.assertFalse(self.map.get_cell(Location(1, 1)).habitable)
 
-    def test_score_cell_decoder(self):
-        ScoreCellDecoder("0").decode({
-            "x" : "0",
-            "y" : "0"
-        }, self.map)
-
-        self.assertTrue(self.map.get_cell(Location(0, 0)).generates_score)
-        self.assertFalse(self.map.get_cell(Location(0, 1)).generates_score)
-        self.assertFalse(self.map.get_cell(Location(1, 0)).generates_score)
-        self.assertFalse(self.map.get_cell(Location(1, 1)).generates_score)
-
-        ScoreCellDecoder("0").decode({
-            "x" : "1",
-            "y" : "1"
-        }, self.map)
-
-        self.assertTrue(self.map.get_cell(Location(0, 0)).generates_score)
-        self.assertFalse(self.map.get_cell(Location(0, 1)).generates_score)
-        self.assertFalse(self.map.get_cell(Location(1, 0)).generates_score)
-        self.assertTrue(self.map.get_cell(Location(1, 1)).generates_score)
-
     def test_pickup_decoder(self):
         PickupDecoder("0").decode({
             "x" : "1",
