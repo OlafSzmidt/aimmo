@@ -38,18 +38,13 @@ class TestServiceInternals(TestCase):
         avatar_manager = SimpleAvatarManager()
         CELLS = [
             [
-                {'pickup': MockPickup('b'), 'avatar': avatar_manager.avatars_by_id[1]},
-                {},
-                {'generates_score': True},
-            ],
-            [
                 {},
                 {'habitable': False},
                 {'pickup': MockPickup('a')},
             ],
         ]
         grid = {Location(x, y-1): MockCell(Location(x, y-1), **CELLS[x][y])
-                for y in xrange(3) for x in xrange(2)}
+                for y in range(2) for x in range(1)}
         state_provider.set_world(GameState(WorldMap(grid, {}), avatar_manager))
 
         world_state = WorldState(state_provider)
@@ -65,12 +60,6 @@ class TestServiceInternals(TestCase):
         self.assertEqual(details['x'], 0)
         self.assertEqual(details['y'], -1)
         self.assertEqual(details['health'], 5)
-        self.assertEqual(details['score'], 0)
-
-    def test_score_locations(self):
-        result = self.setup_world()['map_features']['score_point']['create']
-        self.assertEqual(result[0]['x'], 0)
-        self.assertEqual(result[0]['y'], 1)
 
     @skip("not implemented")
     def test_pickup_list(self):
