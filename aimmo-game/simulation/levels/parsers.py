@@ -82,8 +82,8 @@ class Parser():
 
     def map_apply_transforms(self):
         objects = []
-        for x in xrange(len(self.map)):
-            for y in xrange(len(self.map[x])):
+        for x in range(len(self.map)):
+            for y in range(len(self.map[x])):
                 code = self.map[x][y]
 
                 self.register_transforms(x, y)
