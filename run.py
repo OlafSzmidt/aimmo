@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 import logging
 import os
 import signal
@@ -33,7 +34,7 @@ if __name__ == '__main__':
 
 
 def log(message):
-    print >> sys.stderr, message
+    print(message, file=sys.stderr)
 
 
 def run_command(args, capture_output=False):

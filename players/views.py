@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import logging
 import os
 
@@ -12,7 +13,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 
 from json import dumps
-from models import Avatar, Game, LevelAttempt
+from .models import Avatar, Game, LevelAttempt
 from players import forms
 from . import app_settings
 
