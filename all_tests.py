@@ -7,6 +7,7 @@ Usage:
 Optional arguments:
     -c, --coverage  compute the coverage while running tests.
 """
+from __future__ import print_function
 
 import os
 import subprocess
