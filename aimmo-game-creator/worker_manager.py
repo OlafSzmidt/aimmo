@@ -1,3 +1,5 @@
+from builtins import str
+from builtins import object
 import logging
 import os
 import subprocess
@@ -8,6 +10,7 @@ import pykube
 import requests
 from eventlet.greenpool import GreenPool
 from eventlet.semaphore import Semaphore
+from future.utils import with_metaclass
 
 LOGGER = logging.getLogger(__name__)
 
@@ -49,11 +52,10 @@ class _WorkerManagerData(object):
             return new_games
 
 
-class WorkerManager(object):
+class WorkerManager(with_metaclass(ABCMeta, object)):
     """
     Methods of this class must be thread safe unless explicitly stated.
     """
-    __metaclass__ = ABCMeta
     daemon = True
 
     def __init__(self, games_url):
@@ -111,11 +113,11 @@ class WorkerManager(object):
             LOGGER.error("Failed to obtain game data : %s", err)
         else:
             games_to_add = {id: games[id]
-                            for id in self._data.add_new_games(games.keys())}
+                            for id in self._data.add_new_games(list(games.keys()))}
             LOGGER.debug("Need to add games: %s" % games_to_add)
 
             # Add missing games
-            self._parallel_map(self.spawn, games_to_add.keys(), games_to_add.values())
+            self._parallel_map(self.spawn, list(games_to_add.keys()), list(games_to_add.values()))
 
             # Delete extra games
             known_games = set(games.keys())
@@ -148,7 +150,7 @@ class LocalWorkerManager(WorkerManager):
             port,
         ]
         env = os.environ.copy()
-        game_data = {str(k):str(v) for k,v in game_data.items()}
+        game_data = {str(k):str(v) for k,v in list(game_data.items())}
         env.update(game_data)
         self.workers[game_id] = subprocess.Popen(process_args, cwd=self.worker_directory, env=env)
         worker_url = 'http://%s:%s' % (
@@ -209,7 +211,7 @@ class KubernetesWorkerManager(WorkerManager):
                                         {
                                             'name': env_name,
                                             'value': env_value,
-                                        } for env_name, env_value in environment_variables.items()
+                                        } for env_name, env_value in list(environment_variables.items())
                                     ],
                                     'image': 'ocadotechnology/aimmo-game:%s' % os.environ.get('IMAGE_SUFFIX', 'latest'),
                                     'ports': [

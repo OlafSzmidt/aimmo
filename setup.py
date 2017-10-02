@@ -19,6 +19,10 @@ setup(
         'requests',
         'six',
         'pykube',
+        'future',
+        'importlib',
+        'unittest2',
+        'argparse'
     ],
     tests_require=[
         'django-setuptest',

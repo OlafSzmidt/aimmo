@@ -1,3 +1,5 @@
+from builtins import range
+from builtins import object
 from base64 import urlsafe_b64encode
 from os import urandom
 
@@ -8,7 +10,7 @@ from players import app_settings
 
 GAME_GENERATORS = [
     ('Main', 'Open World'),  # Default
-] + [('Level%s' % i, 'Level %s' % i) for i in xrange(1, app_settings.MAX_LEVEL+1)]
+] + [('Level%s' % i, 'Level %s' % i) for i in range(1, app_settings.MAX_LEVEL+1)]
 
 
 def generate_auth_token():
@@ -79,7 +81,7 @@ class Avatar(models.Model):
     code = models.TextField()
     auth_token = models.CharField(max_length=24, default=generate_auth_token)
 
-    class Meta:
+    class Meta(object):
         unique_together = ('owner', 'game')
 
 
@@ -88,5 +90,5 @@ class LevelAttempt(models.Model):
     user = models.ForeignKey(User)
     game = models.OneToOneField(Game)
 
-    class Meta:
+    class Meta(object):
         unique_together = ('level_number', 'user')
