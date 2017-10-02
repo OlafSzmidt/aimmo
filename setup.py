@@ -22,7 +22,7 @@ setup(
         'future',
         'importlib',
         'unittest2',
-        'argparse'
+        'argparse',
     ],
     tests_require=[
         'django-setuptest',
