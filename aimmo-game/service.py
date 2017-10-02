@@ -44,7 +44,7 @@ def exit_game(user_id):
     del world_state_manager[user_id]
 
 def send_world_update():
-    for world_state in world_state_manager.values():
+    for world_state in list(world_state_manager.values()):
         socketio.emit(
             'world-update',
             world_state.get_updates(),
