@@ -42,6 +42,11 @@ class TestServiceInternals(TestCase):
                 {'habitable': False},
                 {'pickup': MockPickup('a')},
             ],
+            [
+                {'pickup': MockPickup('b'), 'avatar': avatar_manager.avatars_by_id[1]},
+                {},
+                {},
+            ],
         ]
         grid = {Location(x, y-1): MockCell(Location(x, y-1), **CELLS[x][y])
                 for y in range(2) for x in range(1)}
