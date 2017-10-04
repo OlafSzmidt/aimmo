@@ -8,7 +8,7 @@ from httmock import HTTMock
 from simulation.avatar.avatar_manager import AvatarManager
 from simulation.state.game_state import GameState
 from simulation.worker_manager import WorkerManager
-from .maps import InfiniteMap
+from tests.test_simulation.maps import InfiniteMap
 
 
 class ConcreteWorkerManager(WorkerManager):

@@ -7,13 +7,13 @@ from simulation.geography.location import Location
 from simulation.state.game_state import GameState
 from simulation.turn_manager import ConcurrentTurnManager
 from simulation.turn_manager import SequentialTurnManager
-from .dummy_avatar import DummyAvatarManager
-from .dummy_avatar import MoveEastDummy
-from .dummy_avatar import MoveNorthDummy
-from .dummy_avatar import MoveSouthDummy
-from .dummy_avatar import MoveWestDummy
-from .dummy_avatar import WaitDummy
-from .maps import InfiniteMap
+from tests.test_simulation.dummy_avatar import DummyAvatarManager
+from tests.test_simulation.dummy_avatar import MoveEastDummy
+from tests.test_simulation.dummy_avatar import MoveNorthDummy
+from tests.test_simulation.dummy_avatar import MoveSouthDummy
+from tests.test_simulation.dummy_avatar import MoveWestDummy
+from tests.test_simulation.dummy_avatar import WaitDummy
+from tests.test_simulation.maps import InfiniteMap
 
 ORIGIN = Location(0, 0)
 

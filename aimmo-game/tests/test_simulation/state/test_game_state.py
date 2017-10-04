@@ -4,9 +4,9 @@ from unittest import TestCase
 
 from simulation.geography.location import Location
 from simulation.state.game_state import GameState
-from .dummy_avatar import DummyAvatar
-from .dummy_avatar import DummyAvatarManager
-from .maps import InfiniteMap, AvatarMap, EmptyMap
+from tests.test_simulation.maps import InfiniteMap, AvatarMap, EmptyMap
+from tests.test_simulation.dummy_avatar import DummyAvatarManager
+from tests.test_simulation.dummy_avatar import DummyAvatar
 
 
 class FogToEmpty(object):
