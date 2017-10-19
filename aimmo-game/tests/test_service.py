@@ -2,18 +2,17 @@ from __future__ import absolute_import
 
 from unittest import TestCase, skip
 
-from simulation.game_state import GameState
-from simulation.location import Location
+import service
+from simulation.avatar.avatar_manager import AvatarManager
+from simulation.geography.location import Location
+from simulation.state.game_state import GameState
+from simulation.state.world_state import WorldState
 from simulation.turn_manager import state_provider
 from simulation.world_map import WorldMap
-from simulation.world_state import WorldState
-from simulation.avatar.avatar_manager import AvatarManager
-
-import service
-
 from .test_simulation.dummy_avatar import MoveEastDummy
 from .test_simulation.maps import MockPickup
 from .test_simulation.test_world_map import MockCell
+
 
 class SimpleAvatarManager(AvatarManager):
     def __init__(self):
@@ -41,7 +40,7 @@ class TestServiceInternals(TestCase):
             [
                 {'pickup': MockPickup('b'), 'avatar': avatar_manager.avatars_by_id[1]},
                 {},
-                {'generates_score': True},
+                {},
             ],
             [
                 {},
@@ -50,7 +49,7 @@ class TestServiceInternals(TestCase):
             ],
         ]
         grid = {Location(x, y-1): MockCell(Location(x, y-1), **CELLS[x][y])
-                for y in xrange(3) for x in xrange(2)}
+                for y in range(3) for x in range(2)}
         state_provider.set_world(GameState(WorldMap(grid, {}), avatar_manager))
 
         world_state = WorldState(state_provider)
@@ -67,11 +66,6 @@ class TestServiceInternals(TestCase):
         self.assertEqual(details['y'], -1)
         self.assertEqual(details['health'], 5)
         self.assertEqual(details['score'], 0)
-
-    def test_score_locations(self):
-        result = self.setup_world()['map_features']['score_point']['create']
-        self.assertEqual(result[0]['x'], 0)
-        self.assertEqual(result[0]['y'], 1)
 
     @skip("not implemented")
     def test_pickup_list(self):

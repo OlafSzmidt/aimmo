@@ -5,9 +5,9 @@ from string import ascii_uppercase
 
 from unittest import TestCase
 
-from simulation.location import Location
+from simulation.geography.location import Location
 from simulation.world_map import WorldMap, world_map_static_spawn_decorator
-from simulation.maps.cell import Cell
+from simulation.geography.cell import Cell
 from .dummy_avatar import DummyAvatar
 from .maps import MockCell, MockPickup
 
@@ -40,16 +40,14 @@ class TestCell(TestCase):
         self.assertNotEqual(cell1, cell2)
 
     def _create_full_cell(self):
-        cell = Cell(Serialiser('location'), False, True)
+        cell = Cell(Serialiser('location'), False)
         cell.avatar = Serialiser('avatar')
         cell.pickup = Serialiser('pickup')
         self.expected = {
             'avatar': 'avatar',
-            'generates_score': True,
             'habitable': False,
             'location': 'location',
             'pickup': 'pickup',
-            'partially_fogged': False
         }
         return cell
 
@@ -83,7 +81,7 @@ class TestWorldMap(TestCase):
     def _generate_grid(self, columns=2, rows=2):
         alphabet = iter(ascii_uppercase)
         grid = {Location(x, y): MockCell(Location(x, y), name=next(alphabet))
-                for x in xrange(columns) for y in xrange(rows)}
+                for x in range(columns) for y in range(rows)}
         return grid
 
     def _grid_from_list(self, in_list):
@@ -110,6 +108,7 @@ class TestWorldMap(TestCase):
         self.assertGridSize(map, 5, 2)
 
     def test_all_cells(self):
+        # Try block when python2 is used.
         map = WorldMap(self._generate_grid(), self.settings)
         cell_names = [c.name for c in map.all_cells()]
         self.assertIn('A', cell_names)
@@ -118,18 +117,17 @@ class TestWorldMap(TestCase):
         self.assertIn('D', cell_names)
         self.assertEqual(len(cell_names), 4)
 
+
     def test_potential_spawns(self):
         spawnable1 = MockCell()
         spawnable2 = MockCell()
-        score_cell = MockCell(generates_score=True)
         unhabitable = MockCell(habitable=False)
         filled = MockCell(avatar='avatar')
-        grid = self._grid_from_list([[spawnable1, score_cell, unhabitable], [unhabitable, spawnable2, filled]])
+        grid = self._grid_from_list([[spawnable1, unhabitable], [unhabitable, spawnable2, filled]])
         map = WorldMap(grid, self.settings)
         cells = list(map.potential_spawn_locations())
         self.assertIn(spawnable1, cells)
         self.assertIn(spawnable2, cells)
-        self.assertNotIn(score_cell, cells, "Score cells should not be spawns")
         self.assertNotIn(unhabitable, cells, "Unhabitable cells should not be spawns")
         self.assertNotIn(filled, cells, "Cells with avatars should not be spawns")
         self.assertEqual(len(cells), 2)
@@ -247,7 +245,6 @@ class TestWorldMap(TestCase):
     def test_not_enough_pickup_space(self):
         self.settings['TARGET_NUM_PICKUPS_PER_AVATAR'] = 1
         grid = self._generate_grid(1, 1)
-        grid[Location(0, 0)].generates_score = True
         map = WorldMap(grid, self.settings)
         map.update(1)
         self.assertEqual(len(list(map.pickup_cells())), 0)
@@ -305,7 +302,7 @@ class TestWorldMapWithOriginCentre(TestWorldMap):
     def _generate_grid(self, columns=2, rows=2):
         alphabet = iter(ascii_uppercase)
         grid = {Location(x, y): MockCell(Location(x, y), name=next(alphabet))
-                for x in xrange(-int_ceil(columns/2.0)+1, int_floor(columns/2.0)+1) for y in xrange(-int_ceil(rows/2.0)+1, int_floor(rows/2.0)+1)}
+                for x in range(-int_ceil(columns/2.0)+1, int_floor(columns/2.0)+1) for y in range(-int_ceil(rows/2.0)+1, int_floor(rows/2.0)+1)}
 
         return grid
 
@@ -328,5 +325,5 @@ class TestWorldMapWithOriginCentre(TestWorldMap):
 class TestStaticSpawnDecorator(TestCase):
     def test_spawn_is_static(self):
         decorated_map = world_map_static_spawn_decorator(WorldMap({}, {}), Location(3, 7))
-        for _ in xrange(5):
+        for _ in range(5):
             self.assertEqual(decorated_map.get_random_spawn_location(), Location(3, 7))

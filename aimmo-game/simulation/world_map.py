@@ -2,14 +2,22 @@ import math
 import random
 from logging import getLogger
 
-from simulation.world_state import MapFeature
 from simulation.pickups import ALL_PICKUPS
-from simulation.location import Location
-from simulation.maps.cell import Cell
-from simulation.maps.world_generator import DEFAULT_LEVEL_SETTINGS
+from simulation.geography.location import Location
+from simulation.geography.cell import Cell
 
 LOGGER = getLogger(__name__)
 
+
+DEFAULT_LEVEL_SETTINGS = {
+    'TARGET_NUM_CELLS_PER_AVATAR': 0,
+    'TARGET_NUM_SCORE_LOCATIONS_PER_AVATAR': 0,
+    'SCORE_DESPAWN_CHANCE': 0,
+    'TARGET_NUM_PICKUPS_PER_AVATAR': 0,
+    'PICKUP_SPAWN_CHANCE': 0,
+    'NO_FOG_OF_WAR_DISTANCE': 1000,
+    'PARTIAL_FOG_OF_WAR_DISTANCE': 1000,
+}
 
 class WorldMap(object):
     """
@@ -35,19 +43,27 @@ class WorldMap(object):
 
         (min_x, max_x, min_y, max_y) = WorldMap._min_max_from_dimensions(height, width)
         grid = {}
-        for x in xrange(min_x, max_x + 1):
-            for y in xrange(min_y, max_y + 1):
+        for x in range(min_x, max_x + 1):
+            for y in range(min_y, max_y + 1):
                 location = Location(x, y)
                 grid[location] = Cell(location)
         return cls(grid, new_settings)
 
     def all_cells(self):
-        return self.grid.itervalues()
+        '''
+        Written to support both python3 and python2. itervalues() became obsolete
+        in py3 and values() returns dictionary views, which are iterators.
+        :return: Iterator (dictionary or iterator) of all cells in the grid.
+        '''
+        try:
+            values = self.grid.itervalues()
+        except AttributeError:
+            values = self.grid.values()
+        return values
 
     def potential_spawn_locations(self):
         return (c for c in self.all_cells()
                 if c.habitable
-                and not c.generates_score
                 and not c.avatar
                 and not c.pickup)
 
@@ -130,11 +146,11 @@ class WorldMap(object):
         self._add_horizontal_layer(self.max_y() + 1)
 
     def _add_vertical_layer(self, x):
-        for y in xrange(self.min_y(), self.max_y() + 1):
+        for y in range(self.min_y(), self.max_y() + 1):
             self.grid[Location(x, y)] = Cell(Location(x, y))
 
     def _add_horizontal_layer(self, y):
-        for x in xrange(self.min_x(), self.max_x() + 1):
+        for x in range(self.min_x(), self.max_x() + 1):
             self.grid[Location(x, y)] = Cell(Location(x, y))
 
     def _add_pickups(self, num_avatars):
@@ -202,8 +218,8 @@ class WorldMap(object):
 
     def __iter__(self):
         return ((self.get_cell(Location(x, y))
-                for y in xrange(self.min_y(), self.max_y() + 1))
-                for x in xrange(self.min_x(), self.max_x() + 1))
+                for y in range(self.min_y(), self.max_y() + 1))
+                for x in range(self.min_x(), self.max_x() + 1))
 
 
 def world_map_static_spawn_decorator(world_map, spawn_location):
