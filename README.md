@@ -28,7 +28,7 @@ Even with these basic mechanics, there is quite a lot of complexity in creating 
 - run away from another player
 - try to find a health pick up
 - run to the score location
-- ...
+- .....
 
 ## Architecture
 ### Web Interface - `players`
