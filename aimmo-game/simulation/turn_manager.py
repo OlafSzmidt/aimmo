@@ -84,9 +84,9 @@ class TurnManager(Thread):
             except Exception:
                 LOGGER.exception('Error while running turn')
 
-            if game_state.is_complete():
-                LOGGER.info('Game complete')
-                self._mark_complete()
+            # if game_state.is_complete():
+            #     LOGGER.info('Game complete')
+            #     self._mark_complete()
             time.sleep(0.5)
 
 
