@@ -23,7 +23,7 @@ class TestIntegration(TestCase):
 
         delete_old_database()
 
-        p = subprocess.Popen(["python",  "../run.py"], stdout=subprocess.PIPE,
+        p = subprocess.Popen(["python",  "../run.py", "-k"], stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
 
         self.assertTrue(is_server_healthy(url))
