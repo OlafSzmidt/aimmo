@@ -72,4 +72,4 @@ manifests
 test-bin/
 
 # Hypothesis seed examples
-aimmo-game/.hypothesis
+aimmo_game/.hypothesis
