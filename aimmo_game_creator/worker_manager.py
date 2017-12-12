@@ -130,7 +130,7 @@ class LocalWorkerManager(WorkerManager):
     host = '127.0.0.1'
     worker_directory = os.path.join(
         os.path.dirname(__file__),
-        '../aimmo-game/',
+        '../aimmo_game/',
     )
     worker_path = os.path.join(worker_directory, 'service.py')
 
@@ -185,20 +185,20 @@ class KubernetesWorkerManager(WorkerManager):
                     'name': "game-%s" % id,
                     'namespace': 'default',
                     'labels': {
-                        'app': 'aimmo-game',
+                        'app': 'aimmo_game',
                         'game_id': id,
                     },
                 },
                 'spec': {
                     'replicas': 1,
                     'selector': {
-                        'app': 'aimmo-game',
+                        'app': 'aimmo_game',
                         'game_id': id,
                     },
                     'template': {
                         'metadata': {
                             'labels': {
-                                'app': 'aimmo-game',
+                                'app': 'aimmo_game',
                                 'game_id': id,
                             },
                         },
@@ -211,13 +211,13 @@ class KubernetesWorkerManager(WorkerManager):
                                             'value': env_value,
                                         } for env_name, env_value in environment_variables.items()
                                     ],
-                                    'image': 'ocadotechnology/aimmo-game:%s' % os.environ.get('IMAGE_SUFFIX', 'latest'),
+                                    'image': 'ocadotechnology/aimmo_game:%s' % os.environ.get('IMAGE_SUFFIX', 'latest'),
                                     'ports': [
                                         {
                                             'containerPort': 5000,
                                         },
                                     ],
-                                    'name': 'aimmo-game',
+                                    'name': 'aimmo_game',
                                     'resources': {
                                         'limits': {
                                             'cpu': '1000m',
@@ -246,13 +246,13 @@ class KubernetesWorkerManager(WorkerManager):
                 'metadata': {
                     'name': "game-%s" % id,
                     'labels': {
-                        'app': 'aimmo-game',
+                        'app': 'aimmo_game',
                         'game_id': id,
                     },
                 },
                 'spec': {
                     'selector': {
-                        'app': 'aimmo-game',
+                        'app': 'aimmo_game',
                         'game_id': id,
                     },
                     'ports': [
@@ -271,7 +271,7 @@ class KubernetesWorkerManager(WorkerManager):
     def remove_worker(self, game_id):
         for object_type in (pykube.ReplicationController, pykube.Service):
             for game in object_type.objects(self._api).\
-                filter(selector={'app': 'aimmo-game',
+                filter(selector={'app': 'aimmo_game',
                                  'game_id': game_id}):
                 LOGGER.info('Removing %s: %s', object_type.__name__, game.name)
                 game.delete()

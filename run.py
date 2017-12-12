@@ -10,7 +10,7 @@ from subprocess import CalledProcessError
 
 _SCRIPT_LOCATION = os.path.abspath(os.path.dirname(__file__))
 _MANAGE_PY = os.path.join(_SCRIPT_LOCATION, 'example_project', 'manage.py')
-_SERVICE_PY = os.path.join(_SCRIPT_LOCATION, 'aimmo-game-creator', 'service.py')
+_SERVICE_PY = os.path.join(_SCRIPT_LOCATION, 'aimmo_game_creator', 'service.py')
 
 
 def log(message):

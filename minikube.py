@@ -101,7 +101,7 @@ def get_ip():
 
 
 def create_creator_yaml():
-    orig_path = os.path.join(BASE_DIR, 'aimmo-game-creator', 'rc-aimmo-game-creator.yaml')
+    orig_path = os.path.join(BASE_DIR, 'aimmo_game_creator', 'rc-aimmo_game_creator.yaml')
     with open(orig_path) as orig_file:
         content = yaml.safe_load(orig_file.read().replace('latest', 'test').replace('https://staging-dot-decent-digit-629.appspot.com/aimmo', 'http://%s:8000/players' % get_ip()))
     return content
@@ -126,7 +126,7 @@ def build_docker_images(minikube):
         version='auto',
     )
 
-    dirs = ('aimmo-game', 'aimmo-game-creator', 'aimmo-game-worker')
+    dirs = ('aimmo_game', 'aimmo_game_creator', 'aimmo_game_worker')
     for dir in dirs:
         path = os.path.join(BASE_DIR, dir)
         tag = 'ocadotechnology/%s:test' % dir

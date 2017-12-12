@@ -168,7 +168,7 @@ class LocalWorkerManager(WorkerManager):
     host = '127.0.0.1'
     worker_directory = os.path.join(
         os.path.dirname(__file__),
-        '../../aimmo-game-worker/',
+        '../../aimmo_game_worker/',
     )
 
     def __init__(self, *args, **kwargs):
@@ -227,9 +227,9 @@ class KubernetesWorkerManager(WorkerManager):
              'kind': 'Pod',
              'apiVersion': 'v1',
              'metadata': {
-                'generateName': "aimmo-%s-worker-%s-" % (self.game_id, player_id),
+                'generateName': "aimmo_%s_worker-%s-" % (self.game_id, player_id),
                 'labels': {
-                    'app': 'aimmo-game-worker',
+                    'app': 'aimmo_game_worker',
                     'game': self.game_id,
                     'player': str(player_id),
                     },
@@ -243,8 +243,8 @@ class KubernetesWorkerManager(WorkerManager):
                                 'value': "%s/player/%d" % (self.game_url, player_id),
                             },
                         ],
-                        'name': 'aimmo-game-worker',
-                        'image': 'ocadotechnology/aimmo-game-worker:%s' % os.environ.get('IMAGE_SUFFIX', 'latest'),
+                        'name': 'aimmo_game_worker',
+                        'image': 'ocadotechnology/aimmo_game_worker:%s' % os.environ.get('IMAGE_SUFFIX', 'latest'),
                         'ports': [
                             {
                                 'containerPort': 5000,
@@ -277,7 +277,7 @@ class KubernetesWorkerManager(WorkerManager):
 
     def remove_worker(self, player_id):
         for pod in Pod.objects(self.api).filter(selector={
-            'app': 'aimmo-game-worker',
+            'app': 'aimmo_game_worker',
             'game': self.game_id,
             'player': str(player_id),
         }):
